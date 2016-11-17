@@ -2,10 +2,10 @@ package robotstxt
 
 import urlLib "net/url"
 
-type AccessType bool
+type AccessType byte
 const (
-	Allowed AccessType = true
-	Disallowed AccessType = false
+	Allowed    AccessType = iota
+	Disallowed AccessType = iota
 )
 
 type ExclusionStandardType int
@@ -37,15 +37,19 @@ func (r *RobotsTxt) CheckAccess(url, userAgent string, standard ExclusionStandar
 
 type RobotsTxt struct {
 	sites map [string]*robotsData // robotx.txt URL -> robots data
+
+	// used by parser
+	currentUrl string;
+	currentAgent string;
 }
 
 func New() *RobotsTxt {
-	return &RobotsTxt{make(map[string]*robotsData)}
+	return &RobotsTxt{make(map[string]*robotsData),"",""}
 }
 
 type robotsData struct {
 	disallowRules map [string][]string // User-agent -> list of rules
-	allowRules     map [string][]string // User-agent -> list of rules
+	allowRules    map [string][]string // User-agent -> list of rules
 }
 
 func (r *robotsData) checkAccess(uri, userAgent string, standard ExclusionStandardType) (AccessType, error) {

@@ -1,5 +1,7 @@
 package robotstxt
 
+import "strings"
+
 type matcherFunction func (string, string) bool
 
 func getMatcher(standard ExclusionStandardType) matcherFunction {
@@ -13,9 +15,10 @@ func getMatcher(standard ExclusionStandardType) matcherFunction {
 }
 
 func standardMatcher(path, uri string) bool {
-	return false;
+	return strings.HasPrefix(uri, path)
 }
 
 func googleMatcher(path, uri string) bool {
-	return false;
+	// TODO: fix this
+	return standardMatcher(path, uri)
 }
