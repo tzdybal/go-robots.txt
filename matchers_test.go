@@ -35,6 +35,7 @@ func getStandardCases() []testCase {
 
 		{ "/foo", "/foo", true },
 		{ "/foo", "/bar", false },
+		{ "/foo", "/bar/foo", false },
 		{ "/foo", "/foo.html", true },
 		{ "/foo", "/foo/", true},
 		{ "/foo", "/foo/bar", true },

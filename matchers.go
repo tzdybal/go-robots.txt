@@ -1,6 +1,9 @@
 package robotstxt
 
-import "strings"
+import (
+	"strings"
+	"regexp"
+)
 
 type matcherFunction func (string, string) bool
 
@@ -19,6 +22,11 @@ func standardMatcher(path, uri string) bool {
 }
 
 func googleMatcher(path, uri string) bool {
-	// TODO: fix this
-	return standardMatcher(path, uri)
+	pattern := "^" + strings.Replace(path, "*", ".*", -1)
+	match, err := regexp.MatchString(pattern, uri)
+	if err == nil {
+		return match
+	} else {
+		return false
+	}
 }
