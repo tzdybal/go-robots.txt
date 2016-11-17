@@ -24,6 +24,7 @@ func (r *RobotsTxt) fetchAndParse(url string) {
 	case 200 <= status && status < 300:
 		// conditional allow
 		r.currentUrl = url
+		r.sites[url] = &robotsData{map[string][]string{}, map[string][]string{}}
 		scanner := bufio.NewScanner(resp.Body)
 		for scanner.Scan() {
 			r.parseLine(scanner.Text())
@@ -48,10 +49,10 @@ func (r *RobotsTxt) parseLine(line string) {
 	case "User-agent:":
 		r.currentAgent = scanner.Text()
 	case "Disallow:":
-		rules := r.sites[r.currentUrl].disallowRules[r.currentAgent];
-		rules = append(rules, scanner.Text())
+		rules := r.sites[r.currentUrl].disallowRules
+		rules[r.currentAgent] = append(rules[r.currentAgent], scanner.Text())
 	case "Allow:":
-		rules := r.sites[r.currentUrl].allowRules[r.currentAgent];
-		rules = append(rules, scanner.Text())
+		rules := r.sites[r.currentUrl].allowRules
+		rules[r.currentAgent] = append(rules[r.currentAgent], scanner.Text())
 	}
 }
